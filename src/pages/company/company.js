@@ -68,13 +68,15 @@ function Company(props) {
             return (
               <MDBCol md="3">
                 <MDBCard className="mb-2 square border">
-                  <MDBCardBody className='m-0 py-1'>
-                    <h5 className='d-flex align-items-center fw-bolder'>{category.name}</h5>
+                  <MDBCardBody className="m-0 py-1">
+                    <h5 className="d-flex align-items-center fw-bolder">
+                      {category.name}
+                    </h5>
                   </MDBCardBody>
                   {category.wastes.map((waste) => {
                     return (
                       <MDBCardBody className="pt-2">
-                        <MDBRow middle className='mb-1 align-items-center'>
+                        <MDBRow middle className="mb-1 align-items-center">
                           <MDBCol className="fw-light">{waste.name}</MDBCol>
                           <MDBCol md="4">
                             <MDBBtn

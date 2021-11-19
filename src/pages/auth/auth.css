@@ -14,11 +14,24 @@
   height: fit-content;
   border-radius: 10px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  padding: 10px;
+  padding: 20px;
   text-align: center;
 }
 
-.form-box .title {
+.form-box .header .title{
+  font-size: 32px;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0px;
+  font-weight: bold;
+}
+
+.form-box .header img{
+  height: 80px;
+  width: auto;
+}
+
+.form-box .form-title {
   font-size: 32px;
   width: 100%;
   text-align: center;
@@ -34,8 +47,9 @@
 
 .form-box .input-box label {
   width: 100%;
+  color: black;
   text-align: left;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .form-box .input-box input {

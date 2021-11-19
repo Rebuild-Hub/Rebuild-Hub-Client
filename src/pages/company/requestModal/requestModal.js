@@ -43,7 +43,7 @@ export default function RequestModal(props) {
             </MDBRow>
           </MDBModalBody>
           <MDBModalFooter>
-            <MDBBtn color="secondary" onClick={props.toggleShow}>
+            <MDBBtn color="dark" onClick={props.toggleShow}>
               Close
             </MDBBtn>
             <MDBBtn>Send Request</MDBBtn>

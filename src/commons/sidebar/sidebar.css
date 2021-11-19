@@ -1,9 +1,35 @@
-.sidebar{
-    width: 300px;
-    padding: 10px;
-    height: 100vh;
-    background: rgb(36, 36, 36);
-    position: fixed;
-    left: 0px;
-    top: 0px;
+.sidebar {
+  width: 300px;
+  padding: 10px;
+  height: 100vh;
+  background: rgb(36, 36, 36);
+  position: fixed;
+  left: 0px;
+  top: 0px;
+}
+
+.sidebar .sidebar-header {
+  padding: 20px 5px;
+  text-align: center;
+  width: 100%;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.sidebar-header img {
+  width: 150px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.sidebar .sidebar-header h1 {
+  font-weight: bold;
+  font-size: 32px;
+  color: rgb(185, 247, 247);
+  border-bottom: 1px solid grey;
+  padding-bottom: 10px;
+}
+
+.sidebar .sidebar-header p {
+  color: grey;
 }

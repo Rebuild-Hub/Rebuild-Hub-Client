@@ -1,10 +1,11 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./auth.css";
 import { login } from "../../store/actions";
 import { connect } from "react-redux";
+import { MDBBtn } from "mdb-react-ui-kit";
 
 function Auth(props) {
   const navigate = useNavigate();
@@ -32,7 +33,14 @@ function Auth(props) {
         {(formik) => {
           return (
             <div className="form-box">
-              <div className="title">Login</div>
+              <div className="header">
+                <img
+                  src="https://www.recycling.com/wp-content/uploads/2016/06/recycling-symbol-icon-twotone-dark-green.png"
+                  alt="..."
+                ></img>
+                <div className="title">Rebuild Hub</div>
+              </div>
+              <div className="title">Enter your login creadentials</div>
               <div className="input-box">
                 <label name="email">Email</label>
                 <input
@@ -62,10 +70,8 @@ function Auth(props) {
                 </div>
               ) : (
                 <div className="button-container">
-                  <div className="submit-button" onClick={formik.handleSubmit}>
-                    <button>Login</button>
-                  </div>
-                  <Link to="/">Register Now</Link>
+                  <MDBBtn color='dark' className='fw-bolder p-4 py-3 m-2' onClick={formik.handleSubmit}>Login</MDBBtn>
+                  <MDBBtn color='light' className='fw-bold p-4 py-3 m-2'>Register</MDBBtn>
                 </div>
               )}
             </div>
