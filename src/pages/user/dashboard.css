@@ -1,0 +1,15 @@
+.dashboard {
+  width: 100%;
+  padding: 10px;
+  padding-left: 310px;
+}
+
+@media (max-width: 700px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+}
