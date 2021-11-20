@@ -46,7 +46,7 @@ export const categories = [
     ],
   },
   {
-    name: "PLASTIC",
+    name: "PLASTICS",
     wastes: [
       {
         key: "Polythene",
@@ -63,7 +63,7 @@ export const categories = [
     ],
   },
   {
-    name: "EWASTE",
+    name: "E-WASTE",
     wastes: [
       {
         key: "Mobile",

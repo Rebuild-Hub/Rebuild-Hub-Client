@@ -1,4 +1,5 @@
-import React, { PureComponent } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import {
   BarChart,
   Bar,
@@ -9,6 +10,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { userBarChart } from "../utils/userSampleData";
+// import { Requests } from ".";
+// import { categories } from "../utils/categories";
 
 const data = [
   {
@@ -55,14 +59,13 @@ const data = [
   },
 ];
 
-export default function BarchartComponent(props) {
-
-  return (
+function BarchartComponent(props) {
+  return props.stats.length ? (
     <ResponsiveContainer minHeight={400} width="100%" height="100%">
       <BarChart
         width={500}
         height={300}
-        data={props.data}
+        data={userBarChart}
         margin={{
           top: 5,
           right: 0,
@@ -75,8 +78,16 @@ export default function BarchartComponent(props) {
         <YAxis width={45} />
         <Tooltip />
         <Legend />
-        <Bar dataKey="value" fill="#66BB99"/>
+        <Bar dataKey="donated" fill="#66BB99" />
       </BarChart>
     </ResponsiveContainer>
-  );
+  ) : null;
 }
+
+const mapStateToProps = (state) => {
+  return {
+    stats: state.stats.wastes,
+  };
+};
+
+export default connect(mapStateToProps)(BarchartComponent);

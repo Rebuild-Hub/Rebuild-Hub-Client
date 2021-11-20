@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Route, Routes, Navigate, Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { Requests } from "./commons";
 import { AuthLogin, AuthRegister, Company, User } from "./pages";
 import { login } from "./store/actions";
-import loadUserStats from "./utils/loadUserStats";
 
 function App(props) {
   const navigate = useNavigate();
@@ -19,33 +19,44 @@ function App(props) {
       Requests.userDetails(userToken)
         .then((res) => {
           props.login({ ...res.data, token: userToken });
-          navigate("user", { replace: false });
-          console.log(loadUserStats(userToken));
+          navigate(res.data.isCompany ? "company" : "user", { replace: false });
         })
         .catch((err) => {
           console.log(err);
         });
-
     setLoading(false);
   }, [props.loggedIn]);
 
   return (
-    <Routes>
-      {/* protected Routes */}
-      <>
-        <Route
-          path="user"
-          element={props.loggedIn ?  loading ? <div>Loading</div> : <User /> : <Navigate to="/" />}
-        />
-        <Route
-          path="company"
-          element={props.loggedIn ? <Company /> : <Navigate to="/" />}
-        />
-      </>
-      <Route path="/" element={<AuthLogin />} />
-      <Route path="register" element={<AuthRegister />} />
-      <Route path="*" render={<Link to="/"></Link>}></Route>
-    </Routes>
+    <>
+      <ToastContainer />
+      <Routes>
+        {/* protected Routes */}
+        <>
+          <Route
+            path="user"
+            element={
+              props.loggedIn ? (
+                loading ? (
+                  <div>Loading</div>
+                ) : (
+                  <User />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route
+            path="company"
+            element={props.loggedIn ? <Company /> : <Navigate to="/" />}
+          />
+        </>
+        <Route path="/" element={<AuthLogin />} />
+        <Route path="register" element={<AuthRegister />} />
+        <Route path="*" render={<Link to="/"></Link>}></Route>
+      </Routes>
+    </>
   );
 }
 

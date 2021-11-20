@@ -2,6 +2,7 @@
   width: 100%;
   padding: 10px;
   padding-left: 310px;
+  background: rgba(212, 212, 212, 0.1);
 }
 
 @media (max-width: 700px) {

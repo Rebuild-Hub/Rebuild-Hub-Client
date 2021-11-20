@@ -1,26 +1,26 @@
 export const userBarChart = [
   {
     name: "Newspapers",
-    value: 1000,
+    donated: 1000,
   },
   {
     name: "Steel",
-    value: 500,
+    donated: 500,
   },
   {
     name: "Plastic",
-    value: 1200,
+    donated: 1200,
   },
   {
     name: "Cardboard",
-    value: 500,
+    donated: 500,
   },
   {
     name: "Trades",
-    value: 100,
+    donated: 100,
   },
   {
     name: "Newslaundary",
-    value: 300,
+    donated: 300,
   },
 ];

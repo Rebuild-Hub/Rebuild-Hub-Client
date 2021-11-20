@@ -34,12 +34,10 @@ function AuthRegister(props) {
         onSubmit={async (values) => {
           setLoading(true);
           setLoading(false);
-          console.log(values);
           Requests.requestRegister(values)
             .then((res) => {
               props.login({ ...values, token: res.data.token });
               navigate("/user", { replace: false });
-              console.log(res);
             })
             .catch((err) => {
               console.log(err);

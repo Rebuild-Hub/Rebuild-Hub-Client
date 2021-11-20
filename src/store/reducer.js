@@ -33,6 +33,15 @@ const Reducer = (state = defaultState, action) => {
       };
     }
 
+    case Actions.SETSTATS: {
+      return {
+        ...state,
+        stats: {
+          ...action.payload.data,
+        },
+      };
+    }
+
     default: {
       return {
         ...state,

@@ -27,11 +27,9 @@ function Auth(props) {
         })}
         onSubmit={(values) => {
           setLoading(true);
-          console.log(values);
 
           Requests.requestLogin(values)
             .then((res) => {
-              console.log(res);
               props.login({ ...values, token: res.data.token });
               navigate("/user", { replace: false });
               // storing the token in local storage

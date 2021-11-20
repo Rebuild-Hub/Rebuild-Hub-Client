@@ -4,8 +4,6 @@ import { updateUserData } from "../store/actions";
 import { categories } from "./categories";
 
 const LoadUserStats = (token) => {
-  console.log("Loading Stats");
-
   var sum = 0;
   var stats = [...categories];
 

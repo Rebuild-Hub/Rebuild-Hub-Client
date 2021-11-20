@@ -31,8 +31,15 @@ const wastes = axios.create({
 });
 
 export const newDonation = (data, token) => {
-  return wastes.post(`/`, {
-    ...data,
+  return wastes.post("/", data, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getDonationsByCategory = (category, token) => {
+  return wastes.get(`/${category}`, {
     headers: {
       Authorization: token,
     },
@@ -40,7 +47,7 @@ export const newDonation = (data, token) => {
 };
 
 export const userDonations = (wasteName, token) => {
-  return wastes.get(`/waste/${wasteName}`, {
+  return wastes.get(`/wasteItem/${wasteName}`, {
     headers: {
       Authorization: token,
     },
