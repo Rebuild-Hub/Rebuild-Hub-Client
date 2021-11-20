@@ -1,88 +1,58 @@
 import axios from "axios";
 
-const adminBackend = axios.create({
-  baseURL: "https://game-ify.herokuapp.com/api",
+const baseURL = "http://localhost:5000/api";
+
+// Authentication Routes
+
+const auth = axios.create({
+  baseURL: `${baseURL}/auth`,
 });
 
-export const getAllPCs = () => {
-  return adminBackend.get("/common/all-pcs");
-};
-
-export const adminLogin = (data) => {
-  return adminBackend.post("/admin/signin", data);
-};
-
-export const userSignIn = (data) => {
-  return adminBackend.post("/user/signin", data);
-};
-
-export const getAdmin = (token) => {
-  var config = {
-    method: "get",
-    url: "https://game-ify.herokuapp.com/api/admin",
+export const userDetails = (token) => {
+  return auth.get("/me", {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("gamify-admin-token")}`,
+      Authorization: token,
     },
-  };
-  return axios(config);
-};
-
-export const putPcToMaintainance = (id) => {
-  var data = JSON.stringify({
-    pcId: id,
   });
-
-  var config = {
-    method: "patch",
-    url: "https://game-ify.herokuapp.com/api/admin/pc-maintainance",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("gamify-admin-token")}`,
-      "Content-Type": "application/json",
-    },
-    data: data,
-  };
-
-  return axios(config);
 };
 
-export const removePcFromMaintainance = (id) => {
-  var data = JSON.stringify({
-    pcId: id,
-  });
-
-  var config = {
-    method: "patch",
-    url: "https://game-ify.herokuapp.com/api/admin/remove-pc-maintainance",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("gamify-admin-token")}`,
-      "Content-Type": "application/json",
-    },
-    data: data,
-  };
-
-  return axios(config);
+export const requestLogin = (data) => {
+  return auth.post("/login", data);
 };
 
-export const startSession = (values) => {
-  var data = JSON.stringify({
-    ...values,
-    // "pcId": "616165540a81ae3651d60fef",
-    // "duration": 1,
-    // "date": "Sat Oct 09 2021",
-    // "session_start": "Sat Oct 09 2021 05:32:02 GMT+0000 (Coordinated Universal Time",
-    // "session_end": "Sat Oct 10 2021 05:32:02 GMT+0000 (Coordinated Universal Time",
-    // "cost": 123,
-    // "transactionId": "12345"
-  });
+export const requestRegister = (data) => {
+  return auth.post("/register", data);
+};
 
-  var config = {
-    method: "post",
-    url: "https://game-ify.herokuapp.com/api/user/start",
+// User Routes
+
+const wastes = axios.create({
+  baseURL: `${baseURL}/wastes`,
+});
+
+export const newDonation = (data, token) => {
+  return wastes.post(`/`, {
+    ...data,
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("gamify-user-token")}`,
-      "Content-Type": "application/json",
+      Authorization: token,
     },
-    data: data,
-  };
-  return axios(config);
+  });
+};
+
+export const userDonations = (wasteName, token) => {
+  return wastes.get(`/waste/${wasteName}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+// company Routes
+
+const company = axios.create({
+  baseURL: `${baseURL}/company`,
+});
+
+export const getCompaniesForWaste = (category, waste) => {
+  return company.get(`/stats/${category}/${waste}`);
 };

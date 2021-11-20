@@ -4,17 +4,20 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
-import 'mdb-react-ui-kit/dist/css/mdb.min.css'
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
 // import "bootstrap-icons/font/bootstrap-icons.css";
 import { Provider } from "react-redux";
 import store from "./store";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

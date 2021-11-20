@@ -1,21 +1,23 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./auth.css";
 import { login } from "../../store/actions";
 import { connect } from "react-redux";
 import { MDBBtn } from "mdb-react-ui-kit";
+import { Requests } from "../../commons";
 
 function Auth(props) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
   return (
-    <div className="login">
+    <div className="auth">
       <Formik
         initialValues={{
-          email: "vedant@gmail.com",
-          password: "vedant",
+          email: "",
+          password: "",
         }}
         validationSchema={Yup.object({
           email: Yup.string()
@@ -23,11 +25,23 @@ function Auth(props) {
             .required("Email is required"),
           password: Yup.string().required("This field is required"),
         })}
-        onSubmit={async (values) => {
+        onSubmit={(values) => {
           setLoading(true);
-          props.login(values);
+          console.log(values);
+
+          Requests.requestLogin(values)
+            .then((res) => {
+              console.log(res);
+              props.login({ ...values, token: res.data.token });
+              navigate("/user", { replace: false });
+              // storing the token in local storage
+              localStorage.setItem("rebuild-hub-token", res.data.token);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
           setLoading(false);
-          navigate("/company", { replace: false });
         }}
       >
         {(formik) => {
@@ -65,13 +79,23 @@ function Auth(props) {
               </div>
               <br />
               {loading ? (
-                <div class="d-flex justify-content-center mt-5">
-                  <div class="spinner-border" role="status"></div>
+                <div className="d-flex justify-content-center mt-5">
+                  <div className="spinner-border" role="status"></div>
                 </div>
               ) : (
                 <div className="button-container">
-                  <MDBBtn color='dark' className='fw-bolder p-4 py-3 m-2' onClick={formik.handleSubmit}>Login</MDBBtn>
-                  <MDBBtn color='light' className='fw-bold p-4 py-3 m-2'>Register</MDBBtn>
+                  <MDBBtn
+                    color="dark"
+                    className="fw-bolder p-4 py-3 m-2"
+                    onClick={formik.handleSubmit}
+                  >
+                    Login
+                  </MDBBtn>
+                  <Link to="/register">
+                    <MDBBtn color="light" className="fw-bold p-4 py-3 m-2">
+                      Register
+                    </MDBBtn>
+                  </Link>
                 </div>
               )}
             </div>
