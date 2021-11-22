@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Sidebar, Topbar } from "../../commons";
+import React, { useEffect, useState } from "react";
+import { Requests, Sidebar, Topbar } from "../../commons";
 import {
   MDBBtn,
   MDBCard,
@@ -18,62 +18,61 @@ import BarchartComponent from "../../commons/barChart";
 import { userBarChart } from "../../utils/userSampleData";
 import PieChartComponent from "../../commons/pieChart";
 import { connect } from "react-redux";
-
-const wasteCategories = [
-  {
-    name: "Papers",
-    wastes: [
-      { name: "NewsPapers", donated: 500, target: 1000 },
-      { name: "Books", donated: 600, target: 1000 },
-      { name: "Magazines", donated: 400, target: 1000 },
-    ],
-  },
-  {
-    name: "Metals",
-    wastes: [
-      { name: "Aluminium", donated: 30, target: 50 },
-      { name: "Steel", donated: 30, target: 50 },
-      { name: "Zinc", donated: 30, target: 100 },
-    ],
-  },
-  {
-    name: "Papers",
-    wastes: [
-      { name: "NewsPapers", donated: 500, target: 1000 },
-      { name: "Books", donated: 600, target: 1000 },
-    ],
-  },
-
-  {
-    name: "Papers",
-    wastes: [
-      { name: "NewsPapers", donated: 500, target: 1000 },
-      { name: "Books", donated: 600, target: 1000 },
-      { name: "Magazines", donated: 400, target: 1000 },
-    ],
-  },
-];
+import { categories } from "../../utils/categories";
+import { ClipLoader } from "react-spinners";
 
 function Company(props) {
   const [showModal, setShowModal] = useState(false);
-  const [requestWaste, setRequestWaste] = useState("");
+  const [requestWasteData, setRequestWasteData] = useState({
+    category: "",
+    wasteName: "",
+  });
   const toggleShow = () => setShowModal(!showModal);
+
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [statistics, setStatastics] = useState({
+    PAPERS: {},
+    METALS: {},
+    PLASTICS: {},
+    "E-WASTE": {},
+  });
+
+  useEffect(() => {
+    setLoadingStats(true);
+    const { token } = props.userData;
+    Requests.getCompanyStats(token)
+      .then((res) => {
+        console.log(res.data);
+        setStatastics(res.data);
+        setLoadingStats(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div>
       <Sidebar></Sidebar>
       <div className="dashboard">
         <Topbar {...props} />
         <MDBRow className="m-0">
-          {wasteCategories.map((category) => {
+          {categories.map((category) => {
             return (
               <MDBCol md="3">
-                <MDBCard className="mb-2 square border">
-                  <MDBCardBody className="m-0 py-1">
-                    <h5 className="d-flex align-items-center fw-bolder">
-                      {category.name}
-                    </h5>
-                  </MDBCardBody>
+                <MDBCard className="mb-2">
+                  <MDBCardHeader className="text-center">
+                    <h4 className="fw-bold">{category.name}</h4>
+                  </MDBCardHeader>
+
                   {category.wastes.map((waste) => {
+                    const target =
+                      statistics[category.name][waste.key] &&
+                      statistics[category.name][waste.key].target;
+                    const fullfilled =
+                      statistics[category.name][waste.key] &&
+                      statistics[category.name][waste.key].fullfilled;
+
                     return (
                       <MDBCardBody className="pt-2">
                         <MDBRow middle className="mb-1 align-items-center">
@@ -85,23 +84,30 @@ function Company(props) {
                               color="light"
                               onClick={() => {
                                 toggleShow();
-                                setRequestWaste(waste.name);
+                                setRequestWasteData({
+                                  category: category.name,
+                                  wasteName: waste.key,
+                                });
                               }}
                             >
                               Request
                             </MDBBtn>
                           </MDBCol>
                         </MDBRow>
-                        <MDBProgress height="20" className="rounded-5">
-                          <MDBProgressBar
-                            bgColor="primary"
-                            width={100 * (waste.donated / waste.target)}
-                            valuemin={0}
-                            valuemax={waste.target}
-                          >
-                            {waste.donated + "/" + waste.target}
-                          </MDBProgressBar>
-                        </MDBProgress>
+                        {loadingStats ? (
+                          <ClipLoader></ClipLoader>
+                        ) : (
+                          <MDBProgress height="20" className="rounded-5">
+                            <MDBProgressBar
+                              bgColor="primary"
+                              width={100 * (fullfilled / target)}
+                              valuemin={0}
+                              valuemax={target}
+                            >
+                              {fullfilled + "/" + target}
+                            </MDBProgressBar>
+                          </MDBProgress>
+                        )}
                       </MDBCardBody>
                     );
                   })}
@@ -157,7 +163,7 @@ function Company(props) {
         </MDBRow>
       </div>
       <RequestModal
-        waste={requestWaste}
+        waste={requestWasteData}
         showModal={showModal}
         toggleShow={toggleShow}
       ></RequestModal>

@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import {
   BarChart,
   Bar,
@@ -59,8 +58,8 @@ const data = [
   },
 ];
 
-function BarchartComponent(props) {
-  return props.stats.length ? (
+function BarchartComponent() {
+  return (
     <ResponsiveContainer minHeight={400} width="100%" height="100%">
       <BarChart
         width={500}
@@ -81,13 +80,7 @@ function BarchartComponent(props) {
         <Bar dataKey="donated" fill="#66BB99" />
       </BarChart>
     </ResponsiveContainer>
-  ) : null;
+  );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    stats: state.stats.wastes,
-  };
-};
-
-export default connect(mapStateToProps)(BarchartComponent);
+export default (BarchartComponent);

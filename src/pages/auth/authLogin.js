@@ -7,6 +7,7 @@ import { login } from "../../store/actions";
 import { connect } from "react-redux";
 import { MDBBtn } from "mdb-react-ui-kit";
 import { Requests } from "../../commons";
+import { getUserDetailsByToken } from "../../utils/functions";
 
 function Auth(props) {
   const navigate = useNavigate();
@@ -29,17 +30,24 @@ function Auth(props) {
           setLoading(true);
 
           Requests.requestLogin(values)
-            .then((res) => {
-              props.login({ ...values, token: res.data.token });
-              navigate("/user", { replace: false });
+            .then(async (res) => {
+              const token = res.data.token;
+
+              // getting user details using token
+              const userDetails = await getUserDetailsByToken(token);
+              props.login({ ...userDetails, token });
+
+              navigate(userDetails.isCompany ? "company" : "/user", {
+                replace: false,
+              });
+
               // storing the token in local storage
               localStorage.setItem("rebuild-hub-token", res.data.token);
+              setLoading(false);
             })
             .catch((err) => {
               console.log(err);
             });
-
-          setLoading(false);
         }}
       >
         {(formik) => {

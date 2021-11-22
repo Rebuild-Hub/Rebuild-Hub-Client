@@ -179,11 +179,11 @@ function User(props) {
                 <h4 className="fw-bold">Statistics</h4>
               </MDBCardHeader>
               <MDBCardBody className="text-center">
-                {barChartData.length > 0 ? (
+                {/* {barChartData.length > 0 ? ( */}
                   <BarchartComponent data={barChartData}></BarchartComponent>
-                ) : (
+                {/* ) : (
                   <ClipLoader size={20}></ClipLoader>
-                )}
+                )} */}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>

@@ -13,7 +13,6 @@ function App(props) {
   useEffect(() => {
     setLoading(true);
     const userToken = localStorage.getItem("rebuild-hub-token");
-
     // auto login using jwt stored in localstorage
     userToken &&
       Requests.userDetails(userToken)

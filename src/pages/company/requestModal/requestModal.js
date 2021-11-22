@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   MDBBtn,
   MDBModal,
@@ -12,8 +12,18 @@ import {
   MDBCol,
   MDBInput,
 } from "mdb-react-ui-kit";
+import { Field, Formik } from "formik";
+import * as Yup from "yup";
+import { BarLoader } from "react-spinners";
+import { Requests } from "../../../commons";
+import { connect } from "react-redux";
 
-export default function RequestModal(props) {
+function RequestModal(props) {
+  const [requesting, setRequesting] = useState(false);
+
+  useEffect(() => {
+    setRequesting(false);
+  }, [props.waste]);
   return (
     <MDBModal
       closeOnEsc
@@ -24,32 +34,86 @@ export default function RequestModal(props) {
       <MDBModalDialog>
         <MDBModalContent>
           <MDBModalHeader>
-            <MDBModalTitle>Request for {props.waste}</MDBModalTitle>
+            <MDBModalTitle>Request for {props.waste.wasteName}</MDBModalTitle>
             <MDBBtn
               className="btn-close"
               color="none"
               onClick={props.toggleShow}
             ></MDBBtn>
           </MDBModalHeader>
-          <MDBModalBody>
-            <MDBRow>
-              <MDBCol md='12'>
-                <MDBInput label="Amount (in kg's)"></MDBInput>
-              </MDBCol>
-              <MDBCol md='12'>
-                <label className='mt-3 mb-1'>Expected Date</label>
-                <input type='date' className='w-100 mb-3 px-2 py-1 rounder-5'></input>
-              </MDBCol>
-            </MDBRow>
-          </MDBModalBody>
-          <MDBModalFooter>
-            <MDBBtn color="dark" onClick={props.toggleShow}>
-              Close
-            </MDBBtn>
-            <MDBBtn>Send Request</MDBBtn>
-          </MDBModalFooter>
+          <Formik
+            initialValues={{
+              amount: "",
+            }}
+            validationSchema={Yup.object({
+              amount: Yup.number()
+                .typeError("Should be a number")
+                .min(0, "Should be greater than 0")
+                .required("This field is required"),
+            })}
+            onSubmit={(values) => {
+              setRequesting(true);
+              Requests.requestForWaste(
+                {
+                  category: props.waste.category,
+                  wasteName: props.waste.wasteName,
+                  amount: +values.amount,
+                },
+                props.userData.token
+              )
+                .then((res) => {
+                  console.log(res);
+                  setRequesting(false);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              console.log(props.waste);
+              console.log(values);
+            }}
+          >
+            {(formik) => {
+              return (
+                <div>
+                  <MDBModalBody>
+                    <MDBRow>
+                      <MDBCol md="12">
+                        <label>Enter amount in Kg's</label>
+                        <Field
+                          name="amount"
+                          type="number"
+                          className="w-100 px-2 py-1 rounder-5"
+                        ></Field>
+                        <span className="text-danger mb-3">
+                          {formik.errors.amount}
+                        </span>
+                      </MDBCol>
+                    </MDBRow>
+                  </MDBModalBody>
+                  <MDBModalFooter>
+                    <MDBBtn color="dark" onClick={props.toggleShow}>
+                      Close
+                    </MDBBtn>
+                    <MDBBtn onClick={formik.handleSubmit}>
+                      {requesting ? (
+                        <BarLoader width={20}></BarLoader>
+                      ) : (
+                        "Send Request"
+                      )}
+                    </MDBBtn>
+                  </MDBModalFooter>
+                </div>
+              );
+            }}
+          </Formik>
         </MDBModalContent>
       </MDBModalDialog>
     </MDBModal>
   );
 }
+
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps)(RequestModal);

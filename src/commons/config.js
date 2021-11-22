@@ -63,3 +63,26 @@ const company = axios.create({
 export const getCompaniesForWaste = (category, waste) => {
   return company.get(`/stats/${category}/${waste}`);
 };
+
+export const getCompanyStats = (token) => {
+  return company.get(`/me`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const requestForWaste = (
+  { category = "PAPERS", wasteName = "Newspapers", amount = 200 },
+  token
+) => {
+  return company.post(
+    `/request/${category}/${wasteName}`,
+    { value: amount },
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+};
