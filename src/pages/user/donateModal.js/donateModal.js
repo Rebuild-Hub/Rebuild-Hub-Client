@@ -20,6 +20,7 @@ import * as Yup from "yup";
 import { ClipLoader } from "react-spinners";
 
 function DonateModal(props) {
+  const [sendingRequest, setSendingRequest] = useState(false);
   const [companiesAvailable, setcompaniesAvailable] = useState([]);
   const [loadingCompanies, setLodingCompanies] = useState(true);
 
@@ -82,12 +83,17 @@ function DonateModal(props) {
                   category: props.wasteData.category,
                 };
 
+                setSendingRequest(true);
+
                 // calling the backend api
                 Requests.newDonation(data, props.token)
                   .then((res) => {
-                    props.toggleShow();
-                    window.location.reload();
                     Toasts.successToast("Donated Successfully");
+                    setTimeout(() => {
+                      props.toggleShow();
+                      setSendingRequest(false);
+                      window.location.reload();
+                    }, 3000);
                   })
                   .catch((err) => {
                     console.log(err);
@@ -192,10 +198,12 @@ function DonateModal(props) {
                         Close
                       </MDBBtn>
                       <MDBBtn
-                        disabled={companiesAvailable.length === 0}
+                        disabled={
+                          companiesAvailable.length === 0 || sendingRequest
+                        }
                         onClick={formik.handleSubmit}
                       >
-                        Donate
+                        {sendingRequest ? <ClipLoader size={15}></ClipLoader> : "Donate"}
                       </MDBBtn>
                     </MDBModalFooter>
                   </>
