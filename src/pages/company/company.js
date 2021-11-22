@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Requests, Sidebar, Topbar } from "../../commons";
+import {
+  NewBarChart,
+  NewPieChart,
+  Requests,
+  Sidebar,
+  Topbar,
+} from "../../commons";
 import {
   MDBBtn,
   MDBCard,
@@ -14,9 +20,6 @@ import {
   MDBTableHead,
 } from "mdb-react-ui-kit";
 import RequestModal from "./requestModal/requestModal";
-import BarchartComponent from "../../commons/barChart";
-import { userBarChart } from "../../utils/userSampleData";
-import PieChartComponent from "../../commons/pieChart";
 import { connect } from "react-redux";
 import { categories } from "../../utils/categories";
 import { ClipLoader } from "react-spinners";
@@ -36,6 +39,42 @@ function Company(props) {
     PLASTICS: {},
     "E-WASTE": {},
   });
+
+  const getDataforPieChart = () => {
+    var data = [];
+    var labels = [];
+
+    Object.keys(statistics).forEach((category, index) => {
+      const catObject = statistics[category];
+      var donated = 0;
+
+      Object.keys(catObject).forEach((waste) => {
+        donated = donated + catObject[waste].fullfilled;
+      });
+
+      data.push(donated);
+      labels.push(category);
+    });
+
+    return { res: data, labels };
+  };
+
+  const getDataforBarChart = () => {
+    var data = [];
+    var labels = [];
+
+    Object.keys(statistics).forEach((category, index) => {
+      const catObject = statistics[category];
+      Object.keys(catObject).forEach((waste) => {
+        data.push(catObject[waste].fullfilled);
+        labels.push(waste);
+      });
+    });
+
+    console.log(data, labels);
+
+    return { res: data, labels };
+  };
 
   useEffect(() => {
     setLoadingStats(true);
@@ -115,7 +154,7 @@ function Company(props) {
               </MDBCol>
             );
           })}
-          <MDBCol md={12}>
+          {/* <MDBCol md={12}>
             <MDBCard>
               <MDBCardHeader>Orders</MDBCardHeader>
               <MDBCardBody>
@@ -144,22 +183,23 @@ function Company(props) {
                 </MDBTable>
               </MDBCardBody>
             </MDBCard>
-          </MDBCol>
+          </MDBCol> */}
           <MDBCol md={12}>
             <MDBCard>
               <MDBCardHeader>Statistics</MDBCardHeader>
               <MDBCardBody>
                 <MDBRow>
                   <MDBCol md={3}>
-                    <PieChartComponent></PieChartComponent>
+                    <NewPieChart data={getDataforPieChart()}></NewPieChart>
                   </MDBCol>
                   <MDBCol md={9}>
-                    <BarchartComponent data={userBarChart}></BarchartComponent>
+                    <NewBarChart data={getDataforBarChart()}></NewBarChart>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
+          <MDBCol md="6"></MDBCol>
         </MDBRow>
       </div>
       <RequestModal

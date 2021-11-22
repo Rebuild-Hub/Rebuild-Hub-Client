@@ -24,7 +24,7 @@ export const requestRegister = (data) => {
   return auth.post("/register", data);
 };
 
-// User Routes
+// Waste Routes
 
 const wastes = axios.create({
   baseURL: `${baseURL}/wastes`,
@@ -48,6 +48,22 @@ export const getDonationsByCategory = (category, token) => {
 
 export const userDonations = (wasteName, token) => {
   return wastes.get(`/wasteItem/${wasteName}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getUserWasteDonations = ( waste , token) => {
+  return wastes.get(`/wasteItem/${waste}/total`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getUserCategoryDonations = (category, token) => {
+  return wastes.get(`/${category}/total`, {
     headers: {
       Authorization: token,
     },

@@ -1,4 +1,3 @@
-import { Action } from "history";
 import * as Actions from "./actions";
 
 const defaultState = {

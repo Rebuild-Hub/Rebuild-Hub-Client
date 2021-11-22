@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./dashboard.css";
-import { Requests, Sidebar, Topbar } from "../../commons";
+import {
+  NewBarChart,
+  NewPieChart,
+  Requests,
+  Sidebar,
+  Topbar,
+} from "../../commons";
 import {
   MDBBtn,
   MDBCard,
@@ -27,7 +33,7 @@ function User(props) {
   });
   const toggleShow = () => setShowModal(!showModal);
 
-  const getDonations = async (wasteName) => {
+  const getWasteDonations = async (wasteName) => {
     var sum = 0;
 
     await Requests.userDonations(wasteName, props.userData.token)
@@ -42,52 +48,65 @@ function User(props) {
     return sum;
   };
 
-  async function getCategoryDonation(category) {
-    var sum = 0;
-    await Requests.getDonationsByCategory(category, props.userData.token)
-      .then((res) => {
-        const donations = res.data.wasteProducts;
-        donations.forEach((element) => {
-          sum = sum + element.weight;
-        });
-      })
-      .catch((err) => {});
+  function getCategoryDonation() {
+    var res = [];
+    var labels = [];
 
-    return sum;
+    pieChartData.forEach((ele) => {
+      res.push(ele.donated);
+      labels.push(ele.category);
+    });
+
+    return { res, labels };
+  }
+
+  function getWasteDonationsData() {
+    var res = [];
+    var labels = [];
+
+    barChartData.forEach((ele) => {
+      res.push(ele.donated);
+      labels.push(ele.waste);
+    });
+
+    return { res, labels };
   }
 
   useEffect(() => {
-    async function getUserStats() {
-      var tempWasteStats = [];
-      var tempCategoryStats = [];
+    var categoryDonation = [];
+    var wasteDonation = [];
 
-      categories.forEach(async (category) => {
-        const cat = await getCategoryDonation(category.name);
-        category.wastes.forEach(async (waste) => {
-          const res = await getDonations(waste.key);
-          tempWasteStats.push({
-            name: waste.name,
-            donated: res,
+    categories.forEach((category) => {
+      Requests.getUserCategoryDonations(category.name, props.userData.token)
+        .then((categoryResponse) => {
+          categoryDonation.push({
+            category: category.name,
+            donated: categoryResponse.data,
+          });
+        })
+        .catch((err) => {
+          categoryDonation.push({
+            category: category.name,
+            donated: 0,
           });
         });
-        tempCategoryStats.push({
-          name: category.name,
-          donated: cat,
-        });
+
+      category.wastes.map((waste) => {
+        Requests.getUserWasteDonations(waste.key, props.userData.token)
+          .then((res) => {
+            wasteDonation.push({
+              waste: waste.name,
+              donated: res.data,
+            });
+          })
+          .catch((err) => {
+            console.log("err");
+          });
       });
+    });
 
-      console.log(tempWasteStats, tempCategoryStats);
-      // updating the states for piechart and bar-chart data
-      setPieChartData(tempCategoryStats);
-      setBarChartData(tempWasteStats);
-
-      props.updateStats({
-        categories: tempCategoryStats,
-        wastes: tempWasteStats,
-      });
-    }
-
-    getUserStats();
+    setBarChartData(wasteDonation);
+    setPieChartData(categoryDonation);
   }, []);
 
   const GetCard = (waste, category) => {
@@ -96,9 +115,8 @@ function User(props) {
 
     useEffect(() => {
       setLoading(true);
-
       async function donations() {
-        const res = await getDonations(waste.key, setDonated.bind(this));
+        const res = await getWasteDonations(waste.key, setDonated.bind(this));
         setDonated(res);
         setLoading(false);
       }
@@ -167,11 +185,7 @@ function User(props) {
             );
           })}
           <MDBCol md="3" className="text-center">
-            {/* {pieChartData.length ? ( */}
-              <PieChartComponent data={pieChartData} />
-            {/* ) : (
-              <ClipLoader size={20}></ClipLoader>
-            )} */}
+            <NewPieChart data={getCategoryDonation()}></NewPieChart>
           </MDBCol>
           <MDBCol md="9">
             <MDBCard>
@@ -179,11 +193,7 @@ function User(props) {
                 <h4 className="fw-bold">Statistics</h4>
               </MDBCardHeader>
               <MDBCardBody className="text-center">
-                {/* {barChartData.length > 0 ? ( */}
-                  <BarchartComponent data={barChartData}></BarchartComponent>
-                {/* ) : (
-                  <ClipLoader size={20}></ClipLoader>
-                )} */}
+                <NewBarChart data={getWasteDonationsData()}></NewBarChart>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
