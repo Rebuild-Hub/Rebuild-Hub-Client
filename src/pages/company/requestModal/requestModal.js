@@ -10,12 +10,11 @@ import {
   MDBModalFooter,
   MDBRow,
   MDBCol,
-  MDBInput,
 } from "mdb-react-ui-kit";
 import { Field, Formik } from "formik";
 import * as Yup from "yup";
-import { BarLoader } from "react-spinners";
-import { Requests } from "../../../commons";
+import { ClipLoader } from "react-spinners";
+import { Requests, Toasts } from "../../../commons";
 import { connect } from "react-redux";
 
 function RequestModal(props) {
@@ -62,14 +61,16 @@ function RequestModal(props) {
                 props.userData.token
               )
                 .then((res) => {
-                  console.log(res);
                   setRequesting(false);
+                  Toasts.successToast("Request Sent");
+                  setTimeout(() => {
+                    props.toggleShow();
+                    window.location.reload();
+                  }, 3000);
                 })
                 .catch((err) => {
                   console.log(err);
                 });
-              console.log(props.waste);
-              console.log(values);
             }}
           >
             {(formik) => {
@@ -96,7 +97,7 @@ function RequestModal(props) {
                     </MDBBtn>
                     <MDBBtn onClick={formik.handleSubmit}>
                       {requesting ? (
-                        <BarLoader width={20}></BarLoader>
+                        <ClipLoader width={20}></ClipLoader>
                       ) : (
                         "Send Request"
                       )}

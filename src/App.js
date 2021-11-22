@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Route, Routes, Navigate, Link, useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 import { ToastContainer } from "react-toastify";
 import { Requests } from "./commons";
 import { AuthLogin, AuthRegister, Company, User } from "./pages";
@@ -11,18 +12,23 @@ function App(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     const userToken = localStorage.getItem("rebuild-hub-token");
     // auto login using jwt stored in localstorage
-    userToken &&
+    if (userToken) {
+      setLoading(true);
+
       Requests.userDetails(userToken)
         .then((res) => {
           props.login({ ...res.data, token: userToken });
-          navigate(res.data.isCompany ? "company" : "user", { replace: false });
+          navigate(res.data.isCompany ? "company" : "user", {
+            replace: false,
+          });
         })
         .catch((err) => {
           console.log(err);
         });
+    }
+
     setLoading(false);
   }, [props.loggedIn]);
 
