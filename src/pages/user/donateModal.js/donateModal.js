@@ -31,9 +31,7 @@ function DonateModal(props) {
         setcompaniesAvailable(res.data);
         setLodingCompanies(false);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   useEffect(() => {
@@ -95,9 +93,7 @@ function DonateModal(props) {
                       window.location.reload();
                     }, 3000);
                   })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+                  .catch((err) => {});
               }}
             >
               {(formik) => {
@@ -203,7 +199,11 @@ function DonateModal(props) {
                         }
                         onClick={formik.handleSubmit}
                       >
-                        {sendingRequest ? <ClipLoader size={15}></ClipLoader> : "Donate"}
+                        {sendingRequest ? (
+                          <ClipLoader size={15}></ClipLoader>
+                        ) : (
+                          "Donate"
+                        )}
                       </MDBBtn>
                     </MDBModalFooter>
                   </>

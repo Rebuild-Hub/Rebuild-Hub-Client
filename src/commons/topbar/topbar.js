@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { logout } from "../../store/actions";
 
 function Topbar(props) {
-  console.log(props);
 
   return (
     <div className="topbar">

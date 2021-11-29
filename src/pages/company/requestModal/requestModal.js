@@ -68,9 +68,7 @@ function RequestModal(props) {
                     window.location.reload();
                   }, 3000);
                 })
-                .catch((err) => {
-                  console.log(err);
-                });
+                .catch((err) => {});
             }}
           >
             {(formik) => {

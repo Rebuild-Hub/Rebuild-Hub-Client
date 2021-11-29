@@ -16,8 +16,6 @@ import {
   MDBRow,
 } from "mdb-react-ui-kit";
 import DonateModal from "./donateModal.js/donateModal";
-import BarchartComponent from "../../commons/barChart";
-import PieChartComponent from "../../commons/pieChart";
 import { categories } from "../../utils/categories";
 import { connect } from "react-redux";
 import { ClipLoader } from "react-spinners";
@@ -99,9 +97,7 @@ function User(props) {
               donated: res.data,
             });
           })
-          .catch((err) => {
-            console.log("err");
-          });
+          .catch((err) => {});
       });
     });
 

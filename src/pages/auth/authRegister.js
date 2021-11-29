@@ -38,9 +38,9 @@ function AuthRegister(props) {
             .then((res) => {
               props.login({ ...values, token: res.data.token });
               navigate("/user", { replace: false });
+              localStorage.setItem("rebuild-hub-token", res.data.token);
             })
             .catch((err) => {
-              console.log(err);
             });
         }}
       >

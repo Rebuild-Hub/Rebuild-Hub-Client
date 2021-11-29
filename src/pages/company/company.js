@@ -71,8 +71,6 @@ function Company(props) {
       });
     });
 
-    console.log(data, labels);
-
     return { res: data, labels };
   };
 
@@ -81,13 +79,10 @@ function Company(props) {
     const { token } = props.userData;
     Requests.getCompanyStats(token)
       .then((res) => {
-        console.log(res.data);
         setStatastics(res.data);
         setLoadingStats(false);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   return (
