@@ -28,6 +28,8 @@ function App(props) {
         .catch((err) => {
           setLoading(false);
         });
+    } else {
+      setLoading(false);
     }
   }, [props.loggedIn]);
 
