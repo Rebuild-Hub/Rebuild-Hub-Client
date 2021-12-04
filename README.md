@@ -39,7 +39,7 @@ Start Scripts
 Sample Credentials
 - User
 		E-Mail - vedant@gmail.com
-		Password - 123456
+		Password - vedant
 - Company
 		E-Mail - Admin@hcl.com
 		Password - 123456
