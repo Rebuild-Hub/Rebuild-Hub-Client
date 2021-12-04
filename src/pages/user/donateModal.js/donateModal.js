@@ -86,7 +86,7 @@ function DonateModal(props) {
                 // calling the backend api
                 Requests.newDonation(data, props.token)
                   .then((res) => {
-                    Toasts.successToast("Donated Successfully");
+                    Toasts.successToast("Request Sent Successfully");
                     setTimeout(() => {
                       props.toggleShow();
                       setSendingRequest(false);
@@ -132,7 +132,7 @@ function DonateModal(props) {
                             ></img>
                           </div>
                         </MDBCol>
-                        <MDBCol>
+                        <MDBCol className="mb-2">
                           <label className="mt-3 mb-1 d-block fw-bolder">
                             Select Company
                           </label>
@@ -186,6 +186,61 @@ function DonateModal(props) {
                               No Companies Available
                             </div>
                           )}
+                        </MDBCol>
+                        <MDBCol className="mb-2" md="12">
+                          <label className="w-100">Pickup Address</label>
+                          <input
+                            type="text"
+                            name="pickupAddress"
+                            className="w-100 rounded-2 border p-2"
+                            placeholder="Pickup Address"
+                          ></input>
+                        </MDBCol>
+                        <MDBCol className="mb-2" md="12">
+                          <label className="w-100">Pickup Date</label>
+                          <input
+                            type="date"
+                            name="pickupAddress"
+                            className="w-100 rounded-2 border p-2"
+                            placeholder="Pickup Address"
+                          ></input>
+                        </MDBCol>
+                        <MDBCol className="mb-2" md="12">
+                          <label className="w-100">Time Slot</label>
+
+                          <div className="my-1 row align-items-center">
+                            <div className="col-1">
+                              <Field
+                                className="form-check-input"
+                                type="radio"
+                                name="companys"
+                                value={"0"}
+                              />
+                            </div>
+                            <div className="col-11">9:AM - 12 PM</div>
+                          </div>
+                          <div className="my-1 row align-items-center">
+                            <div className="col-1">
+                              <Field
+                                className="form-check-input"
+                                type="radio"
+                                name="companys"
+                                value={"1"}
+                              />
+                            </div>
+                            <div className="col-11">12:PM - 3:PM</div>
+                          </div>
+                          <div className="my-1 row align-items-center">
+                            <div className="col-1">
+                              <Field
+                                className="form-check-input"
+                                type="radio"
+                                name="companys"
+                                value={"2"}
+                              />
+                            </div>
+                            <div className="col-11">3:PM - 6:PM</div>
+                          </div>
                         </MDBCol>
                       </MDBRow>
                     </MDBModalBody>

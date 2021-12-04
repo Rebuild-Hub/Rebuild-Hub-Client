@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Route, Routes, Navigate, Link, useNavigate } from "react-router-dom";
-import { ClipLoader } from "react-spinners";
 import { ToastContainer } from "react-toastify";
 import { Requests } from "./commons";
+import PageLoader from "./commons/pageLoader";
 import { AuthLogin, AuthRegister, Company, User } from "./pages";
 import { login } from "./store/actions";
 
@@ -23,12 +23,12 @@ function App(props) {
           navigate(res.data.isCompany ? "company" : "user", {
             replace: false,
           });
+          setLoading(false);
         })
         .catch((err) => {
+          setLoading(false);
         });
     }
-
-    setLoading(false);
   }, [props.loggedIn]);
 
   return (
@@ -42,7 +42,7 @@ function App(props) {
             element={
               props.loggedIn ? (
                 loading ? (
-                  <div>Loading</div>
+                  <PageLoader />
                 ) : (
                   <User />
                 )
@@ -56,7 +56,7 @@ function App(props) {
             element={props.loggedIn ? <Company /> : <Navigate to="/" />}
           />
         </>
-        <Route path="/" element={<AuthLogin />} />
+        <Route path="/" element={loading ? <PageLoader /> : <AuthLogin />} />
         <Route path="register" element={<AuthRegister />} />
         <Route path="*" render={<Link to="/"></Link>}></Route>
       </Routes>
