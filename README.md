@@ -2,9 +2,15 @@
 
 A web app that will bridge the gap between waste donors and waste collectors and will have a huge positive impact on collection of recyclable waste.
 
+### Dashboard
+
+<p align='center'>
+	<img src='https://github.com/Rebuild-Hub/Rebuild-Hub-Client/blob/main/src/commons/companyDashboard.png?raw=true'/>
+</p>
+
 #### Tech Stack
 
-<p >
+<p align='center'>
 <img src='https://www.mindinventory.com/blog/wp-content/uploads/2021/06/mern-stack.png' />
 </p>
 
